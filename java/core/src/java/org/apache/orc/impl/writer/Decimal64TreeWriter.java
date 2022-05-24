@@ -25,11 +25,7 @@ import org.apache.hadoop.hive.ql.util.JavaDataModel;
 import org.apache.hadoop.hive.serde2.io.HiveDecimalWritable;
 import org.apache.orc.OrcProto;
 import org.apache.orc.TypeDescription;
-import org.apache.orc.impl.CryptoUtils;
-import org.apache.orc.impl.OutStream;
-import org.apache.orc.impl.PositionRecorder;
-import org.apache.orc.impl.RunLengthIntegerWriterV2;
-import org.apache.orc.impl.StreamName;
+import org.apache.orc.impl.*;
 
 import java.io.IOException;
 
@@ -37,7 +33,7 @@ import java.io.IOException;
  * Writer for short decimals in ORCv2.
  */
 public class Decimal64TreeWriter extends TreeWriterBase {
-  private final RunLengthIntegerWriterV2 valueWriter;
+  private final QCompressLongWriter valueWriter;
   private final int scale;
 
   public Decimal64TreeWriter(TypeDescription schema,
@@ -47,7 +43,7 @@ public class Decimal64TreeWriter extends TreeWriterBase {
     OutStream stream = context.createStream(
         new StreamName(id, OrcProto.Stream.Kind.DATA, encryption));
     // Use RLEv2 until we have the new RLEv3.
-    valueWriter = new RunLengthIntegerWriterV2(stream, true, true);
+    valueWriter = new QCompressLongWriter(stream);
     scale = schema.getScale();
     if (rowIndexPosition != null) {
       recordPosition(rowIndexPosition);

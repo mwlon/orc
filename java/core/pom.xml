@@ -52,6 +52,11 @@
       <artifactId>aircompressor</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.github.mwlon</groupId>
+      <artifactId>q-compress-jni</artifactId>
+      <version>0.0.0_0.9.3</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-common</artifactId>
     </dependency>

@@ -1758,7 +1758,7 @@ public class TreeReaderFactory {
     protected final int precision;
     protected final int scale;
     protected final boolean skipCorrupt;
-    protected RunLengthIntegerReaderV2 valueReader;
+    protected QCompressLongReader valueReader;
 
     Decimal64TreeReader(int columnId,
                       int precision,
@@ -1777,8 +1777,9 @@ public class TreeReaderFactory {
       super(columnId, present, context);
       this.precision = precision;
       this.scale = scale;
-      valueReader = new RunLengthIntegerReaderV2(valueStream, true,
-          context.isSkipCorrupt());
+      valueReader = new QCompressLongReader(valueStream);
+//      valueReader = new RunLengthIntegerReaderV2(valueStream, true,
+//          context.isSkipCorrupt());
       skipCorrupt = context.isSkipCorrupt();
     }
 
@@ -1796,7 +1797,8 @@ public class TreeReaderFactory {
       super.startStripe(planner, readPhase);
       InStream stream = planner.getStream(new StreamName(columnId,
           OrcProto.Stream.Kind.DATA));
-      valueReader = new RunLengthIntegerReaderV2(stream, true, skipCorrupt);
+      valueReader = new QCompressLongReader(stream);
+//      valueReader = new RunLengthIntegerReaderV2(stream, true, skipCorrupt);
     }
 
     @Override
